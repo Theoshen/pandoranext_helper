@@ -18,31 +18,16 @@ get_current_ip() {
   echo "$current_ip"
 }
 
-# 更新环境变量并重启容器
+# 更新jwt
 update_container() {
-  # 检查容器状态
-  if docker ps -f name=PandoraNext| grep -q "Up"; then
 
-    # 停止并移除容器
-    docker-compose down
+    curl -H "Authorization: Bearer Asd123456" -X POST "https://pandora.tcxj.store:10443/setup/reload"
 
-    # 等待容器停止
-    while docker ps -f name=PandoraNext | grep -q "Up"; do
-      sleep 1
-    done
-
-    # 重新启动容器
-    docker-compose up -d
-  else
-    echo "容器尚未启动，跳过执行 docker-compose down。"
-    # 启动容器
-    docker-compose up -d
-  fi
 }
 
 update_env(){
     # 请求最新的环境变量并保存到文件
-    curl -fL "https://dash.pandoranext.com/data/ZNfWPD6xz60gqTZpf-b2gLi2Ek-k2hqu9jfYL5FQP6E/license.jwt" > license.jwt
+    curl -fL "https://dash.pandoranext.com/data/ZNfWPD6xz60gqTZpf-b2gLi2Ek-k2hqu9jfYL5FQP6E/license.jwt" > ./data/license.jwt
 
     # 从文件中读取环境变量的值
     local token=$(cat license.jwt)
